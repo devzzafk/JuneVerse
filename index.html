@@ -1,0 +1,2533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="JuneVerse — A digital research and creation platform exploring intelligent systems, accessibility, neurotechnology, and human-centered innovation.">
+<title>JuneVerse — Research · Creation · Emerging Technologies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+/* ===== CSS VARIABLES ===== */
+:root {
+  --bg: #080a0f;
+  --bg-2: #0c0f18;
+  --bg-3: #111520;
+  --bg-card: rgba(255,255,255,0.03);
+  --bg-card-hover: rgba(255,255,255,0.06);
+  --border: rgba(255,255,255,0.07);
+  --border-hover: rgba(255,255,255,0.15);
+  --text-primary: #f0f2f7;
+  --text-secondary: #8892a4;
+  --text-muted: #4a5568;
+  --accent: #4f9cf9;
+  --accent-dim: rgba(79,156,249,0.15);
+  --accent-glow: rgba(79,156,249,0.3);
+  --accent-2: #7dd3b0;
+  --accent-3: #a78bfa;
+  --white: #ffffff;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== RESET ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  font-size: 16px;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: inherit; }
+ul { list-style: none; }
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--accent-dim); border-radius: 2px; }
+
+/* ===== UTILITY ===== */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+.section { padding: 120px 0; }
+.section-sm { padding: 80px 0; }
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-label::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 1px;
+  background: var(--accent);
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+.section-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  max-width: 560px;
+  line-height: 1.75;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 28px;
+  border-radius: var(--radius);
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: var(--transition);
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0);
+  transition: var(--transition);
+}
+.btn:hover::after { background: rgba(255,255,255,0.05); }
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg);
+}
+.btn-primary:hover {
+  background: #6aabff;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 32px var(--accent-glow);
+}
+.btn-outline {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-hover);
+}
+.btn-outline:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+.btn-ghost {
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+}
+.btn-ghost:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+}
+
+/* ===== NOISE OVERLAY ===== */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 20px 0;
+  transition: var(--transition);
+}
+.navbar.scrolled {
+  background: rgba(8,10,15,0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav-logo-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.7); }
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.nav-link {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: var(--transition);
+  letter-spacing: 0.01em;
+}
+.nav-link:hover { color: var(--text-primary); background: var(--bg-card); }
+.nav-cta {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent);
+  padding: 9px 18px;
+  border: 1px solid rgba(79,156,249,0.3);
+  border-radius: 8px;
+  transition: var(--transition);
+}
+.nav-cta:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 4px;
+}
+.nav-hamburger span {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: var(--text-primary);
+  transition: var(--transition);
+}
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 280px;
+  height: 100vh;
+  background: var(--bg-2);
+  border-left: 1px solid var(--border);
+  padding: 80px 32px 40px;
+  z-index: 999;
+  transition: 0.4s cubic-bezier(0.4,0,0.2,1);
+  flex-direction: column;
+  gap: 8px;
+}
+.mobile-menu.open { right: 0; }
+.mobile-menu a {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  transition: var(--transition);
+}
+.mobile-menu a:hover { color: var(--text-primary); }
+.mobile-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 998;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.mobile-overlay.open { opacity: 1; }
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: 120px 0 80px;
+}
+.hero-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.hero-glow-1 {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(79,156,249,0.08) 0%, transparent 70%);
+  top: -100px;
+  right: -100px;
+  animation: float-glow 8s ease-in-out infinite;
+}
+.hero-glow-2 {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(167,139,250,0.06) 0%, transparent 70%);
+  bottom: 0;
+  left: -50px;
+  animation: float-glow 10s ease-in-out infinite reverse;
+}
+@keyframes float-glow {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.05); }
+}
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+}
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border: 1px solid rgba(79,156,249,0.2);
+  border-radius: 50px;
+  background: rgba(79,156,249,0.05);
+  margin-bottom: 36px;
+  animation: fade-up 0.8s ease both;
+}
+.hero-badge::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 6vw, 5.2rem);
+  font-weight: 800;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  margin-bottom: 28px;
+  animation: fade-up 0.8s 0.15s ease both;
+}
+.hero-title .line-accent { color: var(--accent); }
+.hero-subtitle {
+  font-size: clamp(1rem, 1.8vw, 1.18rem);
+  color: var(--text-secondary);
+  line-height: 1.8;
+  max-width: 560px;
+  margin-bottom: 48px;
+  animation: fade-up 0.8s 0.3s ease both;
+  font-weight: 300;
+}
+.hero-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  animation: fade-up 0.8s 0.45s ease both;
+}
+.hero-scroll {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 1;
+  animation: fade-up 1s 0.8s ease both;
+}
+.hero-scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--accent), transparent);
+  animation: scroll-line 2s ease-in-out infinite;
+}
+@keyframes scroll-line {
+  0% { transform: scaleY(0); transform-origin: top; opacity: 0; }
+  50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+  100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+}
+.hero-scroll-text {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* ===== PARTICLES CANVAS ===== */
+#particles-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ===== STATS BAR ===== */
+.stats-bar {
+  padding: 40px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.stats-inner {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 32px;
+}
+.stat-item {
+  text-align: center;
+}
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+}
+.stat-num span { color: var(--accent); }
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* ===== ABOUT ===== */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.about-philosophy {
+  margin-top: 48px;
+  padding: 32px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  gap: 0;
+  flex-wrap: wrap;
+}
+.philo-word {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 8px 16px;
+  transition: var(--transition);
+  cursor: default;
+  border-radius: 8px;
+}
+.philo-sep {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--border-hover);
+  padding: 8px 4px;
+  display: flex;
+  align-items: center;
+}
+.philo-word:hover { color: var(--accent); background: var(--accent-dim); }
+.about-visual {
+  position: relative;
+}
+.about-card-visual {
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 48px;
+  position: relative;
+  overflow: hidden;
+}
+.about-card-visual::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-dim) 0%, transparent 70%);
+}
+.about-mission {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.about-mission-text {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+.about-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 32px;
+}
+.about-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 50px;
+}
+
+/* ===== FOCUS AREAS ===== */
+.focus-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 60px;
+}
+.focus-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  transition: var(--transition);
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+.focus-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--accent-dim) 0%, transparent 60%);
+  opacity: 0;
+  transition: var(--transition);
+}
+.focus-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-4px);
+  background: var(--bg-card-hover);
+}
+.focus-card:hover::before { opacity: 1; }
+.focus-icon {
+  font-size: 1.6rem;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+.focus-name {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+}
+.focus-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== WHAT WE DO ===== */
+.wwd-bg { background: var(--bg-2); }
+.wwd-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-top: 60px;
+}
+.wwd-card {
+  background: var(--bg-2);
+  padding: 48px 36px;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.wwd-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: var(--transition);
+}
+.wwd-card:hover {
+  background: var(--bg-3);
+}
+.wwd-card:hover::after { transform: scaleX(1); }
+.wwd-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+.wwd-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+.wwd-desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+.wwd-icon {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+/* ===== NEUROBRIDGE ===== */
+.neuro-section {
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+  position: relative;
+  overflow: hidden;
+}
+.neuro-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, var(--accent-dim), transparent);
+}
+.neuro-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+.neuro-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--accent-2);
+  text-transform: uppercase;
+  padding: 7px 14px;
+  border: 1px solid rgba(125,211,176,0.25);
+  border-radius: 50px;
+  background: rgba(125,211,176,0.05);
+  margin-bottom: 24px;
+}
+.neuro-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+.neuro-title span { color: var(--accent-2); }
+.neuro-sub {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+}
+.neuro-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+.neuro-visual {
+  position: sticky;
+  top: 120px;
+}
+.neuro-screen {
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.neuro-screen-bar {
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.neuro-dot { width: 10px; height: 10px; border-radius: 50%; }
+.neuro-screen-body {
+  padding: 40px;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+.neuro-demo-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.neuro-demo-cell {
+  aspect-ratio: 1;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: var(--transition);
+  cursor: pointer;
+}
+.neuro-demo-cell:hover, .neuro-demo-cell.active {
+  border-color: var(--accent-2);
+  color: var(--accent-2);
+  background: rgba(125,211,176,0.08);
+}
+.neuro-status {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--accent-2);
+  text-align: center;
+  padding: 12px;
+  background: rgba(125,211,176,0.05);
+  border: 1px solid rgba(125,211,176,0.15);
+  border-radius: 8px;
+}
+.neuro-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+.neuro-thumb {
+  aspect-ratio: 16/10;
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.neuro-thumb:hover { border-color: var(--accent-2); }
+.neuro-info { display: flex; flex-direction: column; gap: 28px; }
+.neuro-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+.neuro-block-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.neuro-block-text {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+.neuro-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.neuro-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-secondary);
+}
+.neuro-disclaimer {
+  background: rgba(79,156,249,0.04);
+  border: 1px solid rgba(79,156,249,0.15);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+.neuro-disclaimer strong { color: var(--text-secondary); }
+.neuro-cta {
+  margin-top: 8px;
+}
+
+/* ===== INSIDE THE LAB ===== */
+.lab-section { background: var(--bg); }
+.lab-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 60px;
+}
+.lab-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 36px 28px;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+}
+.lab-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  transform: scaleX(0);
+  transition: var(--transition);
+}
+.lab-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-3px);
+}
+.lab-card:hover::before { transform: scaleX(1); }
+.lab-card-icon {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+.lab-card-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+.lab-card-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ===== RESEARCH HUB ===== */
+.research-section { background: var(--bg-2); }
+.research-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 60px;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.research-items { display: flex; flex-direction: column; gap: 2px; }
+.research-item {
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: var(--transition);
+}
+.research-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 32px;
+  cursor: pointer;
+}
+.research-item-header:hover { background: var(--bg-card-hover); }
+.research-item-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.research-item-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.research-item-name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.research-item-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+.research-arrow {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+.research-item.open .research-arrow { transform: rotate(180deg); background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+.research-item-body {
+  padding: 0 32px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), padding 0.4s;
+}
+.research-item.open .research-item-body {
+  max-height: 400px;
+  padding: 0 32px 28px;
+}
+.research-body-text {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+}
+
+/* ===== WHY JUNEVERSE ===== */
+.why-section { background: var(--bg); }
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 60px;
+}
+.why-card {
+  padding: 36px;
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.why-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-dim) 0%, transparent 70%);
+  opacity: 0;
+  transition: var(--transition);
+}
+.why-card:hover { border-color: var(--border-hover); transform: translateY(-4px); }
+.why-card:hover::before { opacity: 1; }
+.why-icon {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+.why-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+.why-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ===== VISION ===== */
+.vision-section {
+  background: var(--bg-2);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.vision-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(79,156,249,0.04) 0%, transparent 70%);
+}
+.vision-quote {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 2.4rem);
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.4;
+  max-width: 800px;
+  margin: 0 auto 40px;
+  position: relative;
+  z-index: 1;
+}
+.vision-quote::before {
+  content: '"';
+  font-size: 8rem;
+  font-family: var(--font-display);
+  color: var(--accent-dim);
+  line-height: 0.5;
+  position: absolute;
+  top: 0;
+  left: -20px;
+  z-index: -1;
+  user-select: none;
+}
+.vision-body {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.8;
+  position: relative;
+  z-index: 1;
+}
+.vision-divider {
+  width: 60px;
+  height: 1px;
+  background: var(--accent);
+  margin: 40px auto;
+}
+
+/* ===== FUTURE DIRECTIONS ===== */
+.future-section { background: var(--bg); }
+.timeline {
+  margin-top: 60px;
+  position: relative;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--accent), var(--accent-3), transparent);
+  margin-left: 22px;
+}
+.timeline-item {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 40px;
+  align-items: flex-start;
+}
+.timeline-dot {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  transition: var(--transition);
+}
+.timeline-item:hover .timeline-dot {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+.timeline-body {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  flex: 1;
+  transition: var(--transition);
+}
+.timeline-item:hover .timeline-body { border-color: var(--border-hover); }
+.timeline-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+.timeline-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ===== COMMUNITY ===== */
+.community-section { background: var(--bg-2); }
+.community-header { text-align: center; margin-bottom: 60px; }
+.community-header .section-subtitle { margin: 0 auto; }
+.community-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-bottom: 80px;
+}
+.community-card {
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: var(--transition);
+}
+.community-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+.community-card-icon { font-size: 2rem; }
+.community-card-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.community-card-text { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.75; }
+
+/* ===== FORMS ===== */
+.forms-section { background: var(--bg); }
+.forms-tabs {
+  display: flex;
+  gap: 2px;
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 48px;
+  overflow-x: auto;
+  flex-wrap: wrap;
+}
+.forms-tab {
+  padding: 10px 20px;
+  border-radius: 7px;
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+.forms-tab.active { background: var(--bg); color: var(--text-primary); box-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+.forms-tab:hover:not(.active) { color: var(--text-secondary); }
+.form-panel { display: none; }
+.form-panel.active { display: block; }
+.form-wrap {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 48px;
+  max-width: 640px;
+}
+.form-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.form-subtitle { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 32px; }
+.form-group { margin-bottom: 20px; }
+.form-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 13px 16px;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  transition: var(--transition);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.form-input::placeholder, .form-textarea::placeholder { color: var(--text-muted); }
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--accent);
+  background: var(--bg-card-hover);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+.form-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238892a4' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+  cursor: pointer;
+  color: var(--text-primary);
+}
+.form-select option { background: var(--bg-3); color: var(--text-primary); }
+.form-textarea { resize: vertical; min-height: 120px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-success {
+  display: none;
+  text-align: center;
+  padding: 48px;
+  background: var(--bg-2);
+  border: 1px solid rgba(125,211,176,0.2);
+  border-radius: var(--radius-lg);
+}
+.form-success-icon { font-size: 3rem; margin-bottom: 16px; }
+.form-success-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.form-success-text { font-size: 0.9rem; color: var(--text-secondary); }
+
+/* ===== CONTACT ===== */
+.contact-section { background: var(--bg-2); }
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.contact-info { display: flex; flex-direction: column; gap: 32px; }
+.contact-item {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+.contact-item-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.contact-item-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.contact-item-value {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+.contact-item-value a { color: var(--accent); }
+.social-links {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.social-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  transition: var(--transition);
+}
+.social-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 60px 0 40px;
+}
+.footer-inner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 48px;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+.footer-brand {}
+.footer-logo {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.footer-tagline {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.footer-links {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.footer-link {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  transition: var(--transition);
+}
+.footer-link:hover { color: var(--text-primary); }
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-copy {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+.scroll-top {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.scroll-top:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+/* ===== REVEAL ANIMATION ===== */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .about-grid { grid-template-columns: 1fr; gap: 48px; }
+  .neuro-layout { grid-template-columns: 1fr; }
+  .neuro-visual { position: static; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .wwd-grid { grid-template-columns: repeat(2, 1fr); }
+  .why-grid { grid-template-columns: repeat(2, 1fr); }
+  .lab-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .nav-links, .nav-cta { display: none; }
+  .nav-hamburger { display: flex; }
+  .mobile-menu { display: flex; }
+  .section { padding: 80px 0; }
+  .container { padding: 0 20px; }
+  .hero-title { font-size: 2.4rem; }
+  .wwd-grid { grid-template-columns: 1fr; }
+  .why-grid { grid-template-columns: 1fr; }
+  .lab-grid { grid-template-columns: 1fr; }
+  .community-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .focus-grid { grid-template-columns: repeat(2, 1fr); }
+  .neuro-title { font-size: 3rem; }
+  .research-header { flex-direction: column; align-items: flex-start; }
+  .stats-inner { justify-content: center; }
+  .footer-inner { flex-direction: column; gap: 28px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 480px) {
+  .focus-grid { grid-template-columns: 1fr; }
+  .forms-tab { font-size: 0.75rem; padding: 8px 14px; }
+  .form-wrap { padding: 28px; }
+  .hero-actions { flex-direction: column; }
+  .btn { width: 100%; justify-content: center; }
+  .neuro-title { font-size: 2.4rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">JuneVerse<span class="nav-logo-dot"></span></a>
+      <ul class="nav-links">
+        <li><a href="#hero" class="nav-link">Home</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#focus" class="nav-link">Focus Areas</a></li>
+        <li><a href="#projects" class="nav-link">Projects</a></li>
+        <li><a href="#neurobridge" class="nav-link">NeuroBridge</a></li>
+        <li><a href="#lab" class="nav-link">Lab</a></li>
+        <li><a href="#community" class="nav-link">Community</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+      <a href="#contact" class="nav-cta">Get in Touch</a>
+      <div class="nav-hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</nav>
+<div class="mobile-overlay" id="mobile-overlay"></div>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#hero" class="mobile-link">Home</a>
+  <a href="#about" class="mobile-link">About</a>
+  <a href="#focus" class="mobile-link">Focus Areas</a>
+  <a href="#projects" class="mobile-link">Projects</a>
+  <a href="#neurobridge" class="mobile-link">NeuroBridge</a>
+  <a href="#lab" class="mobile-link">Lab</a>
+  <a href="#community" class="mobile-link">Community</a>
+  <a href="#contact" class="mobile-link">Contact</a>
+</div>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="hero-canvas">
+    <canvas id="particles-canvas"></canvas>
+    <div class="hero-glow-1"></div>
+    <div class="hero-glow-2"></div>
+    <div class="hero-grid"></div>
+  </div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">Research · Creation · Emerging Technologies</div>
+      <h1 class="hero-title">Building and<br>Documenting<br><span class="line-accent">Emerging Technologies</span></h1>
+      <p class="hero-subtitle">JuneVerse is a digital research and creation platform exploring intelligent systems, accessibility, neurotechnology, and human-centered innovation.</p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary">Explore Projects ↗</a>
+        <a href="#about" class="btn btn-outline">Learn More</a>
+        <a href="#contact" class="btn btn-ghost">Contact Us</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <span class="hero-scroll-text">Scroll</span>
+  </div>
+</section>
+
+<!-- ===== STATS BAR ===== -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="stats-inner">
+      <div class="stat-item">
+        <div class="stat-num"><span>15</span>+</div>
+        <div class="stat-label">Focus Areas</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num"><span>6</span></div>
+        <div class="stat-label">Core Capabilities</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num"><span>1</span></div>
+        <div class="stat-label">Flagship Project</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Ideas Explored</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ABOUT ===== -->
+<section class="section" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="section-label">About JuneVerse</div>
+        <h2 class="section-title">A Platform Built for Purposeful Innovation</h2>
+        <p class="section-subtitle">JuneVerse is a digital research and creation platform focused on building and documenting technologies that connect humans, machines, and intelligent systems.</p>
+        <br>
+        <p class="section-subtitle">Our work explores emerging technologies including brain-computer interfaces, artificial intelligence, assistive systems, and human-centered innovation.</p>
+        <br>
+        <p class="section-subtitle">JuneVerse exists as an evolving environment where ideas are researched, developed, tested, and documented openly.</p>
+        <div class="about-philosophy">
+          <span class="philo-word">Build</span>
+          <span class="philo-sep">•</span>
+          <span class="philo-word">Test</span>
+          <span class="philo-sep">•</span>
+          <span class="philo-word">Document</span>
+          <span class="philo-sep">•</span>
+          <span class="philo-word">Evolve</span>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="about-visual">
+          <div class="about-card-visual">
+            <div class="about-mission">Our Mission</div>
+            <div class="about-mission-text">Build technologies with purpose and document their evolution openly.</div>
+            <div class="about-tags">
+              <span class="about-tag">Brain-Computer Interfaces</span>
+              <span class="about-tag">Artificial Intelligence</span>
+              <span class="about-tag">Assistive Systems</span>
+              <span class="about-tag">Human-Centered Design</span>
+              <span class="about-tag">Open Documentation</span>
+              <span class="about-tag">Responsible Innovation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOCUS AREAS ===== -->
+<section class="section" id="focus" style="background: var(--bg-2);">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Focus Areas</div>
+      <h2 class="section-title">What We Explore</h2>
+      <p class="section-subtitle">Fifteen interconnected domains forming the intellectual foundation of JuneVerse.</p>
+    </div>
+    <div class="focus-grid">
+      <div class="focus-card reveal">
+        <div class="focus-icon">🧠</div>
+        <div class="focus-name">Artificial Intelligence</div>
+        <div class="focus-desc">Exploring machine learning systems, intelligent algorithms, and the evolving landscape of AI research.</div>
+      </div>
+      <div class="focus-card reveal">
+        <div class="focus-icon">⚡</div>
+        <div class="focus-name">Brain–Computer Interfaces</div>
+        <div class="focus-desc">Investigating the intersection of neuroscience and computing for direct human-machine communication.</div>
+      </div>
+      <div class="focus-card reveal">
+        <div class="focus-icon">♿</div>
+        <div class="focus-name">Assistive Technology</div>
+        <div class="focus-desc">Designing tools and systems that empower people with diverse abilities to engage with the world.</div>
+      </div>
+      <div class="focus-card reveal">
+        <div class="focus-icon">🖱️</div>
+        <div class="focus-name">Human–Computer Interaction</div>
+        <div class="focus-desc">Researching how people and computers interact meaningfully, efficiently, and intuitively.</div>
+      </div>
+      <div class="focus-card reveal">
+        <div class="focus-icon">⚙️</div>
+        <div class="focus-name">Intelligent Systems</div>
+        <div class="focus-desc">Building adaptive, context-aware systems that respond and evolve with human needs.</div>
+      </div>
+      <div class="focus-card reveal">
+        <div class="focus-icon">🚀</div>
+        <div class="focus-name">Emerging Technologies</div>
+        <div class="focus-desc">Tracking and experimenting with frontier technologies before they enter the mainstream.</div>
+      </div>
+      <div class="focus-card reveal">
+        <div class="focus-icon">✨</div>
+        <div class="focus-name">Accessibility Innovation</div>
+        <div class="focus-desc">Creating new approaches to universal design and inclusive technology development.</div>
+      </div>
+      <div class="focus-card reveal">
+        <div class="focus-icon">📊</div>
+        <div class="focus-name">Digital Research</div>
+        <div class="focus-desc">Conducting and publishing rigorous research in digital technology and its human implications.</div>
+      </div>
+      <div class="focus-card reveal">
+        <div class="focus-icon">🎨</div>
+        <div class="focus-name">Computational Design</div>
+        <div class="focus-desc">Merging code and creativity to produce interfaces, systems, and experiences by algorithm.</div>
+      </div>
+      <div class="focus-card reveal">
+        <div class="focus-icon">🔬</div>
+        <div class="focus-name">Experimental Interfaces</div>
+        <div class="focus-desc">Prototyping unconventional ways for humans to interact with digital environments.</div>
+      </div>
+      <div class="focus-card reveal">
+        <div class="focus-icon">💡</div>
+        <div class="focus-name">Applied Innovation</div>
+        <div class="focus-desc">Translating theoretical concepts into practical, real-world technology applications.</div>
+      </div>
+      <div class="focus-card reveal">
+        <div class="focus-icon">🌐</div>
+        <div class="focus-name">Public Development</div>
+        <div class="focus-desc">Building openly and documenting the process for the wider community to learn from.</div>
+      </div>
+      <div class="focus-card reveal">
+        <div class="focus-icon">🔭</div>
+        <div class="focus-name">Future Technologies</div>
+        <div class="focus-desc">Envisioning and prototyping technologies that may shape the next decade of human experience.</div>
+      </div>
+      <div class="focus-card reveal">
+        <div class="focus-icon">📖</div>
+        <div class="focus-name">Research & Innovation</div>
+        <div class="focus-desc">Systematic inquiry into open problems in technology, design, and human systems.</div>
+      </div>
+      <div class="focus-card reveal">
+        <div class="focus-icon">🌍</div>
+        <div class="focus-name">Technology for Social Impact</div>
+        <div class="focus-desc">Developing technologies that directly address equity, access, and human wellbeing.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHAT WE DO ===== -->
+<section class="section wwd-bg" id="projects">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">What We Do</div>
+      <h2 class="section-title">Six Core Capabilities</h2>
+      <p class="section-subtitle">The operational pillars of JuneVerse — how we engage with ideas and turn them into reality.</p>
+    </div>
+    <div class="wwd-grid">
+      <div class="wwd-card">
+        <div class="wwd-num">01</div>
+        <div class="wwd-icon">🔍</div>
+        <div class="wwd-title">Research</div>
+        <div class="wwd-desc">Deep inquiry into emerging technologies, human factors, and systems design. We build understanding before we build products.</div>
+      </div>
+      <div class="wwd-card">
+        <div class="wwd-num">02</div>
+        <div class="wwd-icon">🛠️</div>
+        <div class="wwd-title">Development</div>
+        <div class="wwd-desc">From concept to functional prototype. We build real systems — browser-based tools, intelligent interfaces, and assistive experiences.</div>
+      </div>
+      <div class="wwd-card">
+        <div class="wwd-num">03</div>
+        <div class="wwd-icon">📝</div>
+        <div class="wwd-title">Documentation</div>
+        <div class="wwd-desc">Everything we build is documented openly — decisions, failures, iterations, and learnings form part of the public record.</div>
+      </div>
+      <div class="wwd-card">
+        <div class="wwd-num">04</div>
+        <div class="wwd-icon">🧪</div>
+        <div class="wwd-title">Experimentation</div>
+        <div class="wwd-desc">JuneVerse is a living lab. We test hypotheses, break assumptions, and explore the edges of what current technology makes possible.</div>
+      </div>
+      <div class="wwd-card">
+        <div class="wwd-num">05</div>
+        <div class="wwd-icon">🎯</div>
+        <div class="wwd-title">Design</div>
+        <div class="wwd-desc">Human-centered design thinking guides every project. We design for clarity, accessibility, and meaningful interaction above all else.</div>
+      </div>
+      <div class="wwd-card">
+        <div class="wwd-num">06</div>
+        <div class="wwd-icon">🗺️</div>
+        <div class="wwd-title">Exploration</div>
+        <div class="wwd-desc">We follow intellectual curiosity into uncharted territory — connecting neuroscience, computation, and design into new possibilities.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== NEUROBRIDGE ===== -->
+<section class="section neuro-section" id="neurobridge">
+  <div class="container">
+    <div class="neuro-header reveal">
+      <div class="neuro-badge">Featured Project</div>
+      <h2 class="neuro-title">Neuro<span>Bridge</span></h2>
+      <div class="neuro-sub">Browser-Based Assistive Communication Prototype</div>
+    </div>
+    <div class="neuro-layout">
+      <div class="neuro-visual reveal">
+        <div class="neuro-screen">
+          <div class="neuro-screen-bar">
+            <div class="neuro-dot" style="background:#ff5f57"></div>
+            <div class="neuro-dot" style="background:#febc2e"></div>
+            <div class="neuro-dot" style="background:#28c840"></div>
+            <div style="font-family: var(--font-mono); font-size:11px; color:var(--text-muted); margin-left:auto;">NeuroBridge v0.1 — Demo</div>
+          </div>
+          <div class="neuro-screen-body">
+            <div class="neuro-demo-grid" id="neuro-grid">
+              <div class="neuro-demo-cell" data-char="YES">YES</div>
+              <div class="neuro-demo-cell" data-char="NO">NO</div>
+              <div class="neuro-demo-cell" data-char="HELP">HELP</div>
+              <div class="neuro-demo-cell" data-char="STOP">STOP</div>
+              <div class="neuro-demo-cell" data-char="A">A</div>
+              <div class="neuro-demo-cell" data-char="B">B</div>
+              <div class="neuro-demo-cell" data-char="C">C</div>
+              <div class="neuro-demo-cell" data-char="D">D</div>
+              <div class="neuro-demo-cell" data-char="E">E</div>
+              <div class="neuro-demo-cell" data-char="F">F</div>
+              <div class="neuro-demo-cell" data-char="G">G</div>
+              <div class="neuro-demo-cell" data-char="H">H</div>
+            </div>
+            <div class="neuro-status" id="neuro-status">› System ready — hover over cells to interact</div>
+          </div>
+        </div>
+        <div class="neuro-gallery">
+          <div class="neuro-thumb">👁️</div>
+          <div class="neuro-thumb">🔊</div>
+          <div class="neuro-thumb">🖱️</div>
+        </div>
+      </div>
+      <div class="neuro-info reveal">
+        <div class="neuro-block">
+          <div class="neuro-block-label">Project Overview</div>
+          <div class="neuro-block-text">NeuroBridge is an early-stage browser-based assistive communication prototype exploring accessibility-focused interaction systems, computer vision, and human-centered design.</div>
+        </div>
+        <div class="neuro-block">
+          <div class="neuro-block-label">Problem Space</div>
+          <div class="neuro-block-text">Communication barriers affect millions living with ALS, paralysis, stroke, and locked-in syndrome. Conventional interfaces fail users with severe motor limitations. NeuroBridge explores browser-native approaches to bridging this gap without specialized hardware.</div>
+        </div>
+        <div class="neuro-block">
+          <div class="neuro-block-label">Project Focus</div>
+          <div class="neuro-block-text">Accessibility-first communication design, novel interaction systems, computer vision exploration in the browser, assistive technology prototyping, and human-centered design methodology.</div>
+          <div class="neuro-tags">
+            <span class="neuro-tag">Accessibility</span>
+            <span class="neuro-tag">Computer Vision</span>
+            <span class="neuro-tag">HCI</span>
+            <span class="neuro-tag">Browser-Native</span>
+            <span class="neuro-tag">Prototype</span>
+          </div>
+        </div>
+        <div class="neuro-disclaimer">
+          <strong>⚠ Important Disclaimer:</strong> NeuroBridge is not a medical device and does not perform neural decoding, diagnosis, or brain reading. It is an experimental accessibility-focused project exploring browser-based interaction systems.
+        </div>
+        <div class="neuro-cta">
+          <a href="https://juneverse.com/neurobridge" target="_blank" rel="noopener" class="btn btn-primary" style="background: var(--accent-2); color: var(--bg);">View NeuroBridge Project ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== INSIDE THE LAB ===== -->
+<section class="section lab-section" id="lab">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Inside the Lab</div>
+      <h2 class="section-title">The JuneVerse Lab</h2>
+      <p class="section-subtitle">Where ideas are tested, prototypes are born, and technology is explored at the edges of possibility.</p>
+    </div>
+    <div class="lab-grid">
+      <div class="lab-card reveal">
+        <div class="lab-card-icon">💭</div>
+        <div class="lab-card-title">Experimental Concepts</div>
+        <div class="lab-card-desc">Raw ideas under active exploration. Concepts that challenge assumptions and push the boundary of what's technically feasible today.</div>
+      </div>
+      <div class="lab-card reveal">
+        <div class="lab-card-icon">⚙️</div>
+        <div class="lab-card-title">Ongoing Systems</div>
+        <div class="lab-card-desc">Active projects and systems in various stages of development. Living codebases that evolve through continuous iteration.</div>
+      </div>
+      <div class="lab-card reveal">
+        <div class="lab-card-icon">🏗️</div>
+        <div class="lab-card-title">Prototype Development</div>
+        <div class="lab-card-desc">Functional prototypes built to test hypotheses. Fast, intentional, and built to learn — not necessarily to ship.</div>
+      </div>
+      <div class="lab-card reveal">
+        <div class="lab-card-icon">📓</div>
+        <div class="lab-card-title">Research Notes</div>
+        <div class="lab-card-desc">Open documentation of the research process — annotated references, findings, and reflections from the lab journal.</div>
+      </div>
+      <div class="lab-card reveal">
+        <div class="lab-card-icon">🔭</div>
+        <div class="lab-card-title">Future Projects</div>
+        <div class="lab-card-desc">Technologies on the horizon. Ideas in the pipeline shaped by where research, capability, and human need intersect.</div>
+      </div>
+      <div class="lab-card reveal">
+        <div class="lab-card-icon">🗺️</div>
+        <div class="lab-card-title">Technology Exploration</div>
+        <div class="lab-card-desc">Deep dives into specific technologies — understanding how they work, where they fail, and what they could become.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== RESEARCH HUB ===== -->
+<section class="section research-section" id="research">
+  <div class="container">
+    <div class="research-header reveal">
+      <div>
+        <div class="section-label">Research & Documentation</div>
+        <h2 class="section-title">The Public Innovation Notebook</h2>
+      </div>
+      <p class="section-subtitle" style="max-width:360px;">An open record of JuneVerse's evolving knowledge — shared publicly as an act of responsible innovation.</p>
+    </div>
+    <div class="research-items">
+      <div class="research-item reveal" id="ri-1">
+        <div class="research-item-header" onclick="toggleResearch('ri-1')">
+          <div class="research-item-info">
+            <div class="research-item-icon">📋</div>
+            <div>
+              <div class="research-item-name">Development Logs</div>
+              <div class="research-item-tag">Continuous · Ongoing</div>
+            </div>
+          </div>
+          <div class="research-arrow">▼</div>
+        </div>
+        <div class="research-item-body">
+          <div class="research-body-text">Chronological records of every meaningful development milestone, architectural decision, and implementation choice across all JuneVerse projects. Dev logs capture the real story of how technology gets built — including dead ends, unexpected pivots, and small victories.</div>
+        </div>
+      </div>
+      <div class="research-item reveal" id="ri-2">
+        <div class="research-item-header" onclick="toggleResearch('ri-2')">
+          <div class="research-item-info">
+            <div class="research-item-icon">🔧</div>
+            <div>
+              <div class="research-item-name">Technical Notes</div>
+              <div class="research-item-tag">Deep-Dive · Reference</div>
+            </div>
+          </div>
+          <div class="research-arrow">▼</div>
+        </div>
+        <div class="research-item-body">
+          <div class="research-body-text">Annotated technical breakdowns of systems, tools, and methods used across the platform. Technical notes serve as living references — updated as understanding deepens — covering everything from computer vision fundamentals to interface architecture patterns.</div>
+        </div>
+      </div>
+      <div class="research-item reveal" id="ri-3">
+        <div class="research-item-header" onclick="toggleResearch('ri-3')">
+          <div class="research-item-info">
+            <div class="research-item-icon">🔭</div>
+            <div>
+              <div class="research-item-name">Experimental Findings</div>
+              <div class="research-item-tag">Research · Analysis</div>
+            </div>
+          </div>
+          <div class="research-arrow">▼</div>
+        </div>
+        <div class="research-item-body">
+          <div class="research-body-text">Results, observations, and analysis from experiments conducted across all JuneVerse initiatives. Whether a prototype succeeds or fails, findings are documented with equal rigor. Negative results are published — they often contain the most valuable information.</div>
+        </div>
+      </div>
+      <div class="research-item reveal" id="ri-4">
+        <div class="research-item-header" onclick="toggleResearch('ri-4')">
+          <div class="research-item-info">
+            <div class="research-item-icon">🗂️</div>
+            <div>
+              <div class="research-item-name">Project Breakdowns</div>
+              <div class="research-item-tag">In-Depth · Structured</div>
+            </div>
+          </div>
+          <div class="research-arrow">▼</div>
+        </div>
+        <div class="research-item-body">
+          <div class="research-body-text">Structured deep-dives into individual projects — covering the problem statement, approach, design decisions, technical architecture, iteration history, and current state. Project breakdowns function as public case studies in purposeful technology development.</div>
+        </div>
+      </div>
+      <div class="research-item reveal" id="ri-5">
+        <div class="research-item-header" onclick="toggleResearch('ri-5')">
+          <div class="research-item-info">
+            <div class="research-item-icon">🌐</div>
+            <div>
+              <div class="research-item-name">Public Learning</div>
+              <div class="research-item-tag">Open · Educational</div>
+            </div>
+          </div>
+          <div class="research-arrow">▼</div>
+        </div>
+        <div class="research-item-body">
+          <div class="research-body-text">Tutorials, guides, and accessible explainers derived from JuneVerse's research. Public learning materials are written to make complex topics approachable — sharing the knowledge gained through hands-on exploration with a broader audience of curious builders and learners.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHY JUNEVERSE ===== -->
+<section class="section why-section" id="why">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Why JuneVerse</div>
+      <h2 class="section-title">Our Defining Principles</h2>
+      <p class="section-subtitle">Six values that shape how JuneVerse approaches technology, research, and collaboration.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="why-icon">🧍</div>
+        <div class="why-title">Human-Centered</div>
+        <div class="why-desc">Every decision begins and ends with humans. Technology serves people — not the other way around. Usability and dignity are non-negotiable design constraints.</div>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">🧪</div>
+        <div class="why-title">Experimental</div>
+        <div class="why-desc">JuneVerse operates like a research lab. We form hypotheses, run experiments, and treat failure as data. Iteration is the methodology, curiosity is the fuel.</div>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">🔓</div>
+        <div class="why-title">Open Development</div>
+        <div class="why-desc">We build in public and document everything openly. Transparency accelerates learning — for JuneVerse and for anyone following along.</div>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">🎯</div>
+        <div class="why-title">Real-World Focus</div>
+        <div class="why-desc">Our work addresses genuine problems faced by real people. Research stays grounded in practical application and measurable human benefit.</div>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">🔗</div>
+        <div class="why-title">Interdisciplinary</div>
+        <div class="why-desc">The best solutions emerge at the intersection of fields. JuneVerse connects neuroscience, engineering, design, and ethics into cohesive research programs.</div>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">🌍</div>
+        <div class="why-title">Impact-Oriented</div>
+        <div class="why-desc">We measure success by impact on human lives — not metrics, valuations, or downloads. Technology is a means, not an end in itself.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VISION ===== -->
+<section class="section vision-section" id="vision">
+  <div class="container">
+    <div class="reveal">
+      <blockquote class="vision-quote">Technology becomes meaningful when it improves communication, accessibility, and human capability.</blockquote>
+      <div class="vision-divider"></div>
+      <p class="vision-body">JuneVerse exists to bridge ideas, research, and real-world systems through responsible innovation and public exploration.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FUTURE DIRECTIONS ===== -->
+<section class="section future-section" id="future">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Looking Ahead</div>
+      <h2 class="section-title">Future Directions</h2>
+      <p class="section-subtitle">The territories JuneVerse is moving toward — research initiatives and technology areas on the horizon.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <div class="timeline-dot">🧠</div>
+        <div class="timeline-body">
+          <div class="timeline-title">AI Systems</div>
+          <div class="timeline-desc">Developing purpose-built AI systems aligned with accessibility and human-centered values. Focusing on transparency, explainability, and real-world utility in constrained environments.</div>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot">🖥️</div>
+        <div class="timeline-body">
+          <div class="timeline-title">Advanced Interfaces</div>
+          <div class="timeline-desc">Exploring the next generation of human-computer interfaces — multimodal, adaptive, and accessible by design from the ground up.</div>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot">⚡</div>
+        <div class="timeline-body">
+          <div class="timeline-title">Neurotechnology</div>
+          <div class="timeline-desc">Deepening research into brain-computer interfaces, neural signal processing, and responsible neurotechnology for communication and accessibility.</div>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot">♿</div>
+        <div class="timeline-body">
+          <div class="timeline-title">Accessibility Platforms</div>
+          <div class="timeline-desc">Building comprehensive accessibility ecosystems — integrated platforms that address communication needs across multiple disability contexts.</div>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot">💬</div>
+        <div class="timeline-body">
+          <div class="timeline-title">Intelligent Communication</div>
+          <div class="timeline-desc">Developing intelligent communication systems that adapt to user context, physical capability, and environmental conditions in real time.</div>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot">📚</div>
+        <div class="timeline-body">
+          <div class="timeline-title">Research Initiatives</div>
+          <div class="timeline-desc">Formalizing JuneVerse's research programs with structured methodology, peer review, and public publication of findings across all focus areas.</div>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot">💻</div>
+        <div class="timeline-body">
+          <div class="timeline-title">Emerging Computational Tools</div>
+          <div class="timeline-desc">Tracking and integrating emerging computational paradigms — quantum computing adjacencies, neuromorphic hardware, and browser-native computation advances.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COMMUNITY ===== -->
+<section class="section community-section" id="community">
+  <div class="container">
+    <div class="community-header reveal">
+      <div class="section-label">Community</div>
+      <h2 class="section-title">Join the JuneVerse Ecosystem</h2>
+      <p class="section-subtitle">JuneVerse welcomes innovators, researchers, designers, developers, and curious builders exploring meaningful technology.</p>
+    </div>
+    <div class="community-grid">
+      <div class="community-card reveal">
+        <div class="community-card-icon">🚀</div>
+        <div class="community-card-title">Become a Member</div>
+        <div class="community-card-text">Join a growing environment focused on experimentation, learning, and technological exploration. Work alongside others who believe technology should serve humanity.</div>
+        <a href="#forms" onclick="openForm('apply')" class="btn btn-primary">Apply to Join ↗</a>
+      </div>
+      <div class="community-card reveal">
+        <div class="community-card-icon">🤝</div>
+        <div class="community-card-title">Collaborate With Us</div>
+        <div class="community-card-text">Open to research partnerships, co-development, design collaboration, and shared innovation. Whether you represent an institution or individual, reach out.</div>
+        <a href="#forms" onclick="openForm('collab')" class="btn btn-outline">Collaborate ↗</a>
+      </div>
+      <div class="community-card reveal">
+        <div class="community-card-icon">✨</div>
+        <div class="community-card-title">Showcase Your Work</div>
+        <div class="community-card-text">Built something meaningful? Share your projects, concepts, or experiments with the JuneVerse ecosystem. Visibility for work that matters.</div>
+        <a href="#forms" onclick="openForm('showcase')" class="btn btn-ghost">Submit Work ↗</a>
+      </div>
+      <div class="community-card reveal">
+        <div class="community-card-icon">💬</div>
+        <div class="community-card-title">Join Community</div>
+        <div class="community-card-text">Connect with builders, researchers, and innovators in the JuneVerse Discord. Discuss ideas, share progress, and explore emerging technology together.</div>
+        <a href="https://discord.gg/juneverse" target="_blank" rel="noopener" class="btn btn-ghost">Join Discord ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FORMS ===== -->
+<section class="section forms-section" id="forms">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Forms</div>
+      <h2 class="section-title">Connect With JuneVerse</h2>
+    </div>
+    <div class="forms-tabs">
+      <button class="forms-tab active" onclick="switchTab('apply')">Apply to Join</button>
+      <button class="forms-tab" onclick="switchTab('collab')">Collaborate</button>
+      <button class="forms-tab" onclick="switchTab('showcase')">Showcase Work</button>
+      <button class="forms-tab" onclick="switchTab('contact-form')">Contact</button>
+    </div>
+
+    <!-- Apply -->
+    <div class="form-panel active" id="tab-apply">
+      <div class="form-wrap" id="wrap-apply">
+        <div class="form-title">Apply to Join JuneVerse</div>
+        <div class="form-subtitle">Tell us about yourself and why you want to be part of the ecosystem.</div>
+        <form id="form-apply" onsubmit="submitForm(event,'apply')">
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Full Name *</label><input class="form-input" type="text" required placeholder="Your name"></div>
+            <div class="form-group"><label class="form-label">Email *</label><input class="form-input" type="email" required placeholder="your@email.com"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Country *</label><input class="form-input" type="text" required placeholder="Country"></div>
+            <div class="form-group"><label class="form-label">Role / Background *</label><input class="form-input" type="text" required placeholder="e.g. Developer, Researcher"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Skills / Interests *</label><input class="form-input" type="text" required placeholder="e.g. Machine learning, UX design, neuroscience"></div>
+          <div class="form-group"><label class="form-label">Why do you want to join JuneVerse? *</label><textarea class="form-textarea" required placeholder="Tell us what draws you to JuneVerse and what you hope to contribute or learn..."></textarea></div>
+          <div class="form-group"><label class="form-label">Portfolio / LinkedIn / GitHub</label><input class="form-input" type="url" placeholder="https://"></div>
+          <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:8px;">Submit Application →</button>
+        </form>
+      </div>
+      <div class="form-success" id="success-apply">
+        <div class="form-success-icon">✅</div>
+        <div class="form-success-title">Application Received</div>
+        <div class="form-success-text">Application received. Thank you for your interest in JuneVerse. We'll review your application and be in touch soon.</div>
+      </div>
+    </div>
+
+    <!-- Collaborate -->
+    <div class="form-panel" id="tab-collab">
+      <div class="form-wrap" id="wrap-collab">
+        <div class="form-title">Collaborate With JuneVerse</div>
+        <div class="form-subtitle">Open to research, development, partnerships, and shared innovation.</div>
+        <form id="form-collab" onsubmit="submitForm(event,'collab')">
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Name *</label><input class="form-input" type="text" required placeholder="Your name"></div>
+            <div class="form-group"><label class="form-label">Email *</label><input class="form-input" type="email" required placeholder="your@email.com"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Organization</label><input class="form-input" type="text" placeholder="Company, university, or institution"></div>
+          <div class="form-group">
+            <label class="form-label">Collaboration Type *</label>
+            <select class="form-select" required>
+              <option value="" disabled selected>Select type</option>
+              <option>Research</option>
+              <option>Development</option>
+              <option>Design</option>
+              <option>Partnership</option>
+              <option>Project Collaboration</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Message *</label><textarea class="form-textarea" required placeholder="Describe what you have in mind for collaboration..."></textarea></div>
+          <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:8px;">Send Proposal →</button>
+        </form>
+      </div>
+      <div class="form-success" id="success-collab">
+        <div class="form-success-icon">🤝</div>
+        <div class="form-success-title">Collaboration Request Received</div>
+        <div class="form-success-text">Thank you for reaching out. We'll review your proposal and respond shortly.</div>
+      </div>
+    </div>
+
+    <!-- Showcase -->
+    <div class="form-panel" id="tab-showcase">
+      <div class="form-wrap" id="wrap-showcase">
+        <div class="form-title">Showcase Your Work</div>
+        <div class="form-subtitle">Built something meaningful? Share it with the JuneVerse ecosystem.</div>
+        <form id="form-showcase" onsubmit="submitForm(event,'showcase')">
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Your Name *</label><input class="form-input" type="text" required placeholder="Your name"></div>
+            <div class="form-group"><label class="form-label">Project Title *</label><input class="form-input" type="text" required placeholder="Project name"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Category *</label>
+              <select class="form-select" required>
+                <option value="" disabled selected>Select category</option>
+                <option>AI / Machine Learning</option>
+                <option>Accessibility</option>
+                <option>Brain-Computer Interface</option>
+                <option>Human-Computer Interaction</option>
+                <option>Assistive Technology</option>
+                <option>Research / Documentation</option>
+                <option>Design</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">Project Link</label><input class="form-input" type="url" placeholder="https://"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Description *</label><textarea class="form-textarea" required placeholder="Describe your project — what it does, why you built it, and what makes it meaningful..."></textarea></div>
+          <div class="form-group"><label class="form-label">Why Should This Be Featured?</label><textarea class="form-textarea" placeholder="What makes this work relevant to the JuneVerse community?"></textarea></div>
+          <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:8px;">Submit Work →</button>
+        </form>
+      </div>
+      <div class="form-success" id="success-showcase">
+        <div class="form-success-icon">✨</div>
+        <div class="form-success-title">Work Submitted!</div>
+        <div class="form-success-text">Thank you for sharing your project. We'll review it for the JuneVerse showcase.</div>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="form-panel" id="tab-contact-form">
+      <div class="form-wrap" id="wrap-contact-form">
+        <div class="form-title">Send a Message</div>
+        <div class="form-subtitle">Have a question or just want to say hello? We'd love to hear from you.</div>
+        <form id="form-contact-form" onsubmit="submitForm(event,'contact-form')">
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Name *</label><input class="form-input" type="text" required placeholder="Your name"></div>
+            <div class="form-group"><label class="form-label">Email *</label><input class="form-input" type="email" required placeholder="your@email.com"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Subject *</label><input class="form-input" type="text" required placeholder="What's this about?"></div>
+          <div class="form-group"><label class="form-label">Message *</label><textarea class="form-textarea" required placeholder="Your message..." style="min-height: 160px;"></textarea></div>
+          <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:8px;">Send Message →</button>
+        </form>
+      </div>
+      <div class="form-success" id="success-contact-form">
+        <div class="form-success-icon">📨</div>
+        <div class="form-success-title">Message Sent</div>
+        <div class="form-success-text">Thank you for reaching out to JuneVerse. We'll get back to you soon.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section class="section contact-section" id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="reveal">
+        <div class="section-label">Connect With JuneVerse</div>
+        <h2 class="section-title">Let's Build Something Together</h2>
+        <p class="section-subtitle">Whether you're a researcher, developer, designer, or curious explorer — JuneVerse is an open platform for collaboration and discovery.</p>
+        <div class="contact-info" style="margin-top: 48px;">
+          <div class="contact-item">
+            <div class="contact-item-icon">📧</div>
+            <div>
+              <div class="contact-item-label">Email</div>
+              <div class="contact-item-value"><a href="mailto:euonialab@gmail.com">euonialab@gmail.com</a></div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">🌐</div>
+            <div>
+              <div class="contact-item-label">Social & Community</div>
+              <div class="social-links">
+                <a href="https://youtube.com/@juneverse" target="_blank" rel="noopener" class="social-btn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
+                  YouTube
+                </a>
+                <a href="https://instagram.com/juneverse" target="_blank" rel="noopener" class="social-btn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.7.1 4.9 0 3.2 0 3.6-.1 4.9-.1 3.2-1.6 4.8-4.9 4.9-1.3.1-1.7.1-4.9.1-3.2 0-3.6 0-4.9-.1-3.3-.1-4.8-1.7-4.9-4.9C2.2 15.6 2.2 15.2 2.2 12c0-3.2 0-3.6.1-4.9C2.4 3.8 4 2.3 7.1 2.3c1.3-.1 1.7-.1 4.9-.1zm0-2.2C8.7 0 8.3 0 7 .1 2.7.3.3 2.7.1 7 0 8.3 0 8.7 0 12c0 3.3 0 3.7.1 5 .2 4.3 2.6 6.7 7 6.9 1.3.1 1.7.1 5 .1 3.3 0 3.7 0 5-.1 4.3-.2 6.7-2.6 6.9-7 .1-1.3.1-1.7.1-5 0-3.3 0-3.7-.1-5C23.7 2.7 21.3.3 17 .1 15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 1 0 0 12.4A6.2 6.2 0 0 0 12 5.8zm0 10.2a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.8a1.4 1.4 0 1 0 0 2.8 1.4 1.4 0 0 0 0-2.8z"/></svg>
+                  Instagram
+                </a>
+                <a href="https://discord.gg/juneverse" target="_blank" rel="noopener" class="social-btn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 4.4A19.2 19.2 0 0 0 15.5 3c-.2.4-.4.9-.6 1.3a17.8 17.8 0 0 0-5.8 0C8.9 3.9 8.7 3.4 8.5 3A19.2 19.2 0 0 0 3.7 4.4C.5 9.4-.3 14.2.1 18.9a19.4 19.4 0 0 0 5.9 3c.5-.7.9-1.4 1.3-2.1-.7-.3-1.4-.6-2-1 .2-.1.3-.3.5-.4a13.8 13.8 0 0 0 11.8 0l.4.4c-.7.4-1.3.7-2 1 .4.8.8 1.5 1.3 2.1a19.3 19.3 0 0 0 5.9-3c.5-5.4-1-10.2-3.9-14.5zM8.1 16c-1.3 0-2.3-1.1-2.3-2.5S6.8 11 8 11c1.3 0 2.4 1.1 2.3 2.5C10.4 14.9 9.4 16 8.1 16zm7.8 0c-1.3 0-2.3-1.1-2.3-2.5S14.6 11 15.9 11c1.3 0 2.3 1.1 2.3 2.5S17.2 16 15.9 16z"/></svg>
+                  Discord
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="form-wrap">
+          <div class="form-title">Quick Message</div>
+          <div class="form-subtitle">Reach us directly — we respond to all inquiries.</div>
+          <form id="form-quick" onsubmit="submitQuick(event)">
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Name *</label><input class="form-input" type="text" required placeholder="Your name"></div>
+              <div class="form-group"><label class="form-label">Email *</label><input class="form-input" type="email" required placeholder="your@email.com"></div>
+            </div>
+            <div class="form-group"><label class="form-label">Subject</label><input class="form-input" type="text" placeholder="Subject"></div>
+            <div class="form-group"><label class="form-label">Message *</label><textarea class="form-textarea" required placeholder="Your message..." style="min-height:140px;"></textarea></div>
+            <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:8px;">Send Message →</button>
+          </form>
+          <div id="quick-success" style="display:none; text-align:center; padding:24px; color: var(--accent-2);">
+            <div style="font-size:2rem; margin-bottom:8px;">✅</div>
+            <div style="font-family:var(--font-display); font-weight:700; color:var(--text-primary);">Message Sent!</div>
+            <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px;">We'll be in touch soon.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">JuneVerse</div>
+        <div class="footer-tagline">Research • Creation • Emerging Technologies</div>
+      </div>
+      <ul class="footer-links">
+        <li><a href="#hero" class="footer-link">Home</a></li>
+        <li><a href="#about" class="footer-link">About</a></li>
+        <li><a href="#projects" class="footer-link">Projects</a></li>
+        <li><a href="#neurobridge" class="footer-link">NeuroBridge</a></li>
+        <li><a href="#community" class="footer-link">Community</a></li>
+        <li><a href="#contact" class="footer-link">Contact</a></li>
+      </ul>
+      <div class="social-links">
+        <a href="https://youtube.com/@juneverse" target="_blank" rel="noopener" class="social-btn" style="padding:8px 14px; font-size:0.8rem;">▶ YouTube</a>
+        <a href="https://instagram.com/juneverse" target="_blank" rel="noopener" class="social-btn" style="padding:8px 14px; font-size:0.8rem;">◎ Instagram</a>
+        <a href="https://discord.gg/juneverse" target="_blank" rel="noopener" class="social-btn" style="padding:8px 14px; font-size:0.8rem;">◈ Discord</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 JuneVerse. All rights reserved.</div>
+      <button class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">↑</button>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+// ===== PARTICLES =====
+(function() {
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let W, H;
+
+  function resize() {
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.vx = (Math.random() - 0.5) * 0.3;
+      this.vy = (Math.random() - 0.5) * 0.3;
+      this.r = Math.random() * 1.5 + 0.5;
+      this.a = Math.random() * 0.4 + 0.1;
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(79,156,249,${this.a})`;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+  function drawConnections() {
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(79,156,249,${0.08 * (1 - dist/120)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => { p.update(); p.draw(); });
+    drawConnections();
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+// ===== NAVBAR SCROLL =====
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// ===== MOBILE MENU =====
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobile-menu');
+const mobileOverlay = document.getElementById('mobile-overlay');
+
+function toggleMenu(open) {
+  mobileMenu.classList.toggle('open', open);
+  mobileOverlay.classList.toggle('open', open);
+  mobileOverlay.style.display = open ? 'block' : 'none';
+}
+hamburger.addEventListener('click', () => toggleMenu(!mobileMenu.classList.contains('open')));
+mobileOverlay.addEventListener('click', () => toggleMenu(false));
+document.querySelectorAll('.mobile-link').forEach(link => {
+  link.addEventListener('click', () => toggleMenu(false));
+});
+
+// ===== REVEAL ON SCROLL =====
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// ===== RESEARCH ACCORDION =====
+function toggleResearch(id) {
+  const item = document.getElementById(id);
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.research-item').forEach(i => i.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+
+// ===== FORMS - TABS =====
+function switchTab(id) {
+  document.querySelectorAll('.forms-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
+}
+
+function openForm(id) {
+  document.getElementById('forms').scrollIntoView({ behavior: 'smooth' });
+  setTimeout(() => {
+    document.querySelectorAll('.forms-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+    const tabs = ['apply','collab','showcase','contact-form'];
+    const idx = tabs.indexOf(id);
+    document.querySelectorAll('.forms-tab')[idx].classList.add('active');
+    document.getElementById('tab-' + id).classList.add('active');
+  }, 300);
+}
+
+// ===== FORM SUBMISSIONS =====
+function submitForm(event, formId) {
+  event.preventDefault();
+  const form = event.target;
+  const data = new FormData(form);
+  const subject = encodeURIComponent('JuneVerse Form: ' + formId);
+  const body = encodeURIComponent(
+    Array.from(data.entries()).map(([k,v]) => k + ': ' + v).join('\n')
+  );
+  window.location.href = `mailto:euonialab@gmail.com?subject=${subject}&body=${body}`;
+
+  document.getElementById('wrap-' + formId).style.display = 'none';
+  document.getElementById('success-' + formId).style.display = 'block';
+}
+
+function submitQuick(event) {
+  event.preventDefault();
+  const form = event.target;
+  const data = new FormData(form);
+  const subject = encodeURIComponent('JuneVerse: Quick Message');
+  const body = encodeURIComponent(
+    Array.from(data.entries()).map(([k,v]) => k + ': ' + v).join('\n')
+  );
+  window.location.href = `mailto:euonialab@gmail.com?subject=${subject}&body=${body}`;
+  form.style.display = 'none';
+  document.getElementById('quick-success').style.display = 'block';
+}
+
+// ===== NEUROBRIDGE DEMO =====
+document.querySelectorAll('.neuro-demo-cell').forEach(cell => {
+  cell.addEventListener('mouseenter', () => {
+    document.querySelectorAll('.neuro-demo-cell').forEach(c => c.classList.remove('active'));
+    cell.classList.add('active');
+    document.getElementById('neuro-status').textContent = '› Selected: ' + cell.dataset.char;
+  });
+  cell.addEventListener('mouseleave', () => {
+    cell.classList.remove('active');
+    document.getElementById('neuro-status').textContent = '› System ready — hover over cells to interact';
+  });
+});
+
+// ===== COUNTER ANIMATION =====
+function animateCounter(el) {
+  const target = parseFloat(el.querySelector('span').textContent);
+  if (!target) return;
+  let start = 0;
+  const duration = 1500;
+  const step = (timestamp) => {
+    if (!start) start = timestamp;
+    const progress = Math.min((timestamp - start) / duration, 1);
+    el.querySelector('span').textContent = Math.floor(progress * target);
+    if (progress < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.stat-num').forEach(n => animateCounter(n));
+      statsObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.stats-bar').forEach(el => statsObserver.observe(el));
+
+// ===== ACTIVE NAV =====
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 200) current = s.id;
+  });
+  document.querySelectorAll('.nav-link').forEach(l => {
+    l.style.color = l.getAttribute('href') === '#' + current ? 'var(--text-primary)' : '';
+  });
+});
+</script>
+</body>
+</html>
